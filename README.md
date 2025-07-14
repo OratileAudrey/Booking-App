@@ -1,39 +1,25 @@
-# bookings
+# 🧳 Fun Travels – Booking App
 
-This template should help get you started developing with Vue 3 in Vite.
+A simple, responsive travel booking form built with **Vue 3 + TypeScript** for the [Fun Travels](https://oratileaudrey.com) brand by Oratile Audrey.
 
-## Recommended IDE Setup
+Visitors fill in their dream trip details — including destination, budget, dates, and preferences — and submit directly to WhatsApp with a pre-filled message. No login or account required.
 
-[VSCode](https://code.visualstudio.com/) + [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar) (and disable Vetur).
+---
 
-## Type Support for `.vue` Imports in TS
+## ✨ Features
 
-TypeScript cannot handle type information for `.vue` imports by default, so we replace the `tsc` CLI with `vue-tsc` for type checking. In editors, we need [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar) to make the TypeScript language service aware of `.vue` types.
+- 📝 Clean and user-friendly booking form
+- 📱 WhatsApp integration for instant messaging
+- 🌐 Fully responsive layout with modern styling
+- 💻 Built with Vue 3 + TypeScript
 
-## Customize configuration
+---
 
-See [Vite Configuration Reference](https://vite.dev/config/).
+## 🚀 How to Run Locally
 
-## Project Setup
-
-```sh
+```bash
+git clone https://github.com/OratileAudrey/Booking-App.git
+cd Booking-App
 npm install
-```
-
-### Compile and Hot-Reload for Development
-
-```sh
 npm run dev
-```
-
-### Type-Check, Compile and Minify for Production
-
-```sh
-npm run build
-```
-
-### Lint with [ESLint](https://eslint.org/)
-
-```sh
-npm run lint
 ```
