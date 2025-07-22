@@ -29,12 +29,13 @@
         </div>
 
         <div class="input-group">
-          <label for="dates">Travel Dates</label>
-          <input id="dates" name="dates" v-model="form.dates" type="text" placeholder="e.g. 10 Dec - 15 Dec" required />
+          <label for="dates">Travel dates?</label>
+          <input id="dates" name="dates" v-model="form.dates" type="text" placeholder="e.g. July 15-20 or just July"
+            required />
         </div>
 
         <div class="input-group">
-          <label for="duration">Duration (Days)</label>
+          <label for="duration">How long (Days)?</label>
           <input id="duration" name="duration" v-model="form.duration" type="number" min="1" required />
         </div>
       </div>
@@ -46,15 +47,21 @@
       </div>
 
       <div class="input-group">
-        <label for="help">What can I help you with?</label>
-        <select id="help" v-model="form.help" required>
-          <option disabled value="">-- Choose your needs --</option>
-          <option>🏨 Accommodation</option>
-          <option>🚗 Transport</option>
-          <option>🎯 Activities & Experiences</option>
-          <option>✈️ Planning the whole trip</option>
-          <option>🤔 Not sure, let's discuss</option>
-        </select>
+        <label>What can we help you with?</label>
+        <div class="multi-select" ref="dropdownRef">
+          <div class="selected-options" @click="toggleDropdown">
+            {{ form.help.length > 0 ? form.help.join(', ') : 'Select your needs' }}
+          </div>
+          <div class="dropdown-icon" @click="toggleDropdown">▾</div>
+
+
+          <div v-if="dropdownOpen" class="dropdown-options">
+            <label v-for="option in helpOptions" :key="option">
+              <input type="checkbox" :value="option" v-model="form.help" @click.stop />
+              {{ option }}
+            </label>
+          </div>
+        </div>
       </div>
 
       <div class="input-group">
@@ -72,7 +79,7 @@
 </template>
 
 <script lang="ts" setup>
-import { reactive } from 'vue'
+import { ref, reactive, onMounted, onBeforeUnmount } from 'vue'
 
 const form = reactive({
   name: '',
@@ -81,9 +88,35 @@ const form = reactive({
   dates: '',
   duration: 1,
   budget: '',
-  help: '',
+  help: [] as string[],
   extra: ''
 })
+
+
+const helpOptions = [
+  '🏨 Accommodation',
+  '🚗 Transport',
+  '🎯 Activities & Experiences',
+  '✈️ Planning the whole trip',
+  '🤔 Not sure, let\'s discuss'
+]
+
+const dropdownOpen = ref(false)
+const dropdownRef = ref<HTMLElement | null>(null)
+
+const toggleDropdown = () => {
+  dropdownOpen.value = !dropdownOpen.value
+}
+
+const handleClickOutside = (e: MouseEvent) => {
+  if (dropdownRef.value && !dropdownRef.value.contains(e.target as Node)) {
+    dropdownOpen.value = false
+  }
+}
+
+onMounted(() => document.addEventListener('click', handleClickOutside))
+onBeforeUnmount(() => document.removeEventListener('click', handleClickOutside))
+
 
 const submitForm = () => {
   const message = `Hi Fun Travels team! 🌍
@@ -97,7 +130,7 @@ My Trip Details:
 • Duration: ${form.duration} day(s)
 • Budget: ${form.budget}
 
-I need help with: ${form.help}
+I need help with: ${form.help.join(', ')}
 
 Additional info: ${form.extra || 'Nothing specific!'}
 
@@ -114,7 +147,7 @@ Thank you! `
 .booking-container {
   max-width: 600px;
   margin: 0 auto;
-  padding: 2rem;
+  /* padding: 2rem; */
   background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
   border-radius: 20px;
   box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
@@ -168,7 +201,6 @@ Thank you! `
 .logo:hover {
   transform: scale(1.05);
 }
-
 
 .booking-form {
   background: white;
@@ -277,7 +309,7 @@ Thank you! `
 /* Responsive design */
 @media (max-width: 768px) {
   .booking-container {
-    margin: 1rem;
+    /* margin: 1rem; */
     padding: 1.5rem;
   }
 
@@ -320,5 +352,58 @@ Thank you! `
 
 .booking-container {
   animation: fadeIn 0.6s ease-out;
+  min-height: 100vh;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  padding: 2rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.multi-select {
+  position: relative;
+  border: 2px solid #e1e8ed;
+  border-radius: 12px;
+  padding: 1rem;
+  background: #f8fafc;
+  cursor: pointer;
+  user-select: none;
+}
+
+.selected-options {
+  font-size: 1rem;
+  color: #334155;
+}
+
+.dropdown-icon {
+  position: absolute;
+  top: 50%;
+  right: 1rem;
+  transform: translateY(-50%);
+  font-size: 1rem;
+  color: #6b7280;
+}
+
+.dropdown-options {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  background: white;
+  border: 2px solid #e1e8ed;
+  border-radius: 12px;
+  margin-top: 0.5rem;
+  padding: 1rem;
+  z-index: 10;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.05);
+}
+
+.dropdown-options label {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 0.5rem;
+  font-size: 0.95rem;
+  color: #334155;
 }
 </style>
